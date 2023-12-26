@@ -1,23 +1,37 @@
-// Function to calculate BMI
 function calculateBMI() {
     var height = document.getElementById('height').value;
     var weight = document.getElementById('weight').value;
 
     var bmi = weight / ((height / 100) * (height / 100));
     var result = '';
+    var calorieIntakeSuggestion = '';
+    var calorieBurnSuggestion = '';
 
     if (bmi < 18.5) {
         result = 'Underweight';
+        calorieIntakeSuggestion = 'Consume approximately 2500 calories/day';
+        calorieBurnSuggestion = 'Burn around 200 calories/day';
     } else if (bmi >= 18.5 && bmi <= 24.9) {
         result = 'Normal weight';
+        calorieIntakeSuggestion = 'Consume approximately 2000 calories/day';
+        calorieBurnSuggestion = 'Burn around 500 calories/day';
     } else if (bmi >= 25 && bmi <= 29.9) {
         result = 'Overweight';
+        calorieIntakeSuggestion = 'Consume approximately 1500 calories/day';
+        calorieBurnSuggestion = 'Burn around 700 calories/day';
     } else {
         result = 'Obesity';
+        calorieIntakeSuggestion = 'Consume approximately 1200 calories/day';
+        calorieBurnSuggestion = 'Burn around 1000 calories/day';
     }
 
-    document.getElementById('bmi-result').innerHTML = 'Your BMI is ' + bmi.toFixed(2) + ' (' + result + ')';
+    var bmiMessage = 'Your BMI is ' + bmi.toFixed(2) + ' (' + result + ').';
+    var calorieMessage = 'Suggested calorie intake: ' + calorieIntakeSuggestion + '. Suggested calorie burn: ' + calorieBurnSuggestion + '.';
+    var disclaimer = 'Note: These are general suggestions. Individual needs may vary. Consult with a healthcare provider for personalized advice.';
+
+    document.getElementById('bmi-result').innerHTML = bmiMessage + '<br>' + calorieMessage + '<br>' + disclaimer;
 }
+
 
 // Global object to store meals for each day
 var weeklyMeals = {
@@ -85,17 +99,30 @@ function generatePlan() {
     container.appendChild(table);
 }
 
+// ... existing JavaScript functions ...
+
 // Function to download the weekly routine as a PDF
 function downloadRoutineAsPDF() {
     var jsPDF = window.jspdf.jsPDF;
     var doc = new jsPDF();
 
-    // Use jsPDF's html method to convert the table to PDF
-    doc.html(document.getElementById('routine-table-container').innerHTML, {
-        callback: function (doc) {
-            doc.save('Weekly_Routine.pdf');
-        },
-        x: 10,
-        y: 10
+    // Capture the routine table and its bounding rectangle
+    var routineTable = document.getElementById('routine-table-container');
+    var rect = routineTable.getBoundingClientRect();
+
+    // Use html2canvas to take a screenshot of the table
+    html2canvas(routineTable).then(canvas => {
+        var imgData = canvas.toDataURL('image/png');
+
+        // Calculate the ratio to fit the image within the PDF page
+        var imgWidth = rect.width > doc.internal.pageSize.getWidth() ? doc.internal.pageSize.getWidth() : rect.width;
+        var imgHeight = canvas.height * imgWidth / canvas.width;
+
+        // Add the image to the PDF
+        doc.addImage(imgData, 'PNG', 10, 10, imgWidth, imgHeight);
+        doc.save('Weekly_Routine.pdf');
     });
 }
+
+// ... remaining JavaScript code ...
+
