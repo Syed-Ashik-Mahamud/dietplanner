@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diet Maintenance Website</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+</head>
+<body>
+    <header>
+        <h1>Diet Maintenance Tool</h1>
+    </header>
+
+    <!-- BMI Calculator Section -->
+    <section id="bmi-calculator">
+        <h2>BMI Calculator</h2>
+        <input type="number" id="height" placeholder="Height in cm">
+        <input type="number" id="weight" placeholder="Weight in kg">
+        <button onclick="calculateBMI()">Calculate BMI</button>
+        <p id="bmi-result"></p>
+    </section>
+
+    <!-- Diet Planner Section -->
+    <section id="diet-planner" class="content-section">
+        <h2>Diet Planner</h2>
+        <label for="day-select">Select Day:</label>
+        <select id="day-select">
+            <option value="1">Sunday</option>
+            <option value="2">Monday</option>
+            <option value="3">Tuesday</option>
+            <option value="4">Wednesday</option>
+            <option value="5">Thursday</option>
+            <option value="6">Friday</option>
+            <option value="7">Saturday</option>
+        </select>
+        <input type="text" id="breakfast-input" placeholder="Breakfast">
+        <input type="text" id="lunch-input" placeholder="Lunch">
+        <input type="text" id="dinner-input" placeholder="Dinner">
+        <button onclick="addMeals()">Add Meals</button>
+    </section>
+
+    <!-- Weekly Routine Section -->
+    <section id="weekly-routine" class="content-section">
+        <h2>Weekly Routine</h2>
+        <div id="routine-table-container"></div>
+        <button onclick="downloadRoutineAsPDF()">Download Routine as PDF</button>
+
+    </section>
+
+    <script src="script.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.3.2/html2canvas.min.js"></script>
+
+    
+
+</body>
+</html>
