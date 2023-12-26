@@ -101,28 +101,29 @@ function generatePlan() {
 
 // ... existing JavaScript functions ...
 
-// Function to download the weekly routine as a PDF
 function downloadRoutineAsPDF() {
     var jsPDF = window.jspdf.jsPDF;
-    var doc = new jsPDF();
+    var doc = new jsPDF('landscape'); // Change to landscape mode for wider content
 
-    // Capture the routine table and its bounding rectangle
-    var routineTable = document.getElementById('routine-table-container');
-    var rect = routineTable.getBoundingClientRect();
-
-    // Use html2canvas to take a screenshot of the table
-    html2canvas(routineTable).then(canvas => {
+    // Capture the routine table using html2canvas
+    html2canvas(document.getElementById('routine-table-container'), {
+        scale: 1, // Adjust scale as needed for better resolution
+        onclone: function (clonedDoc) {
+            // Apply styles to cloned document if needed
+        }
+    }).then(canvas => {
         var imgData = canvas.toDataURL('image/png');
-
-        // Calculate the ratio to fit the image within the PDF page
-        var imgWidth = rect.width > doc.internal.pageSize.getWidth() ? doc.internal.pageSize.getWidth() : rect.width;
+        var imgWidth = 280; // Adjust width to fit landscape page
         var imgHeight = canvas.height * imgWidth / canvas.width;
 
-        // Add the image to the PDF
+        // Check if height exceeds PDF page size, then adjust
+        var pageHeight = doc.internal.pageSize.getHeight();
+        if (imgHeight > pageHeight) {
+            imgHeight = pageHeight;
+            imgWidth = canvas.width * imgHeight / canvas.height;
+        }
+
         doc.addImage(imgData, 'PNG', 10, 10, imgWidth, imgHeight);
         doc.save('Weekly_Routine.pdf');
     });
 }
-
-// ... remaining JavaScript code ...
-
